@@ -15,7 +15,7 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
-import br.com.javabens.BeansCEF;
+import br.com.javabeans.BeansCEF;
 
 /**
  *

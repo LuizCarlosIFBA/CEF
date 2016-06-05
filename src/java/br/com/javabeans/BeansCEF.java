@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.javabens;
+package br.com.javabeans;
 
 /**
  *
@@ -17,7 +17,7 @@ public class BeansCEF {
         return login;
     }
 
-    public void setCpf(String login) {
+    public void setLogin(String login) {
         this.login= login;
     }
 

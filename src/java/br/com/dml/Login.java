@@ -6,7 +6,7 @@
 package br.com.dml;
 
 import br.com.conexao.Conexao;
-import br.com.javabens.BeansCEF;
+import br.com.javabeans.BeansCEF;
 import java.sql.*;
 import java.util.*;
 
@@ -24,7 +24,7 @@ public class Login {
     
     public void cadastroLogin(BeansCEF beans) throws ClassNotFoundException{  
          try {
-                String sql = "insert into contaCadastro(login,senha)values(?,?)";
+                String sql = "insert into cadastroLogin(login,senha)values(?,?)";
                 // prepared statement para inserção
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 // seta os valores
@@ -49,7 +49,7 @@ public class Login {
     public void alterarLogin(BeansCEF beans){
        try {
            PreparedStatement pst;
-           pst = connection.prepareStatement("update contaCadastro set login=?, senha=? where login=? and senha=?");
+           pst = connection.prepareStatement("update cadastroLogin set login=?, senha=? where login=? and senha=?");
            pst.setString(1, beans.getLogin());
            pst.setString(2, beans.getSenha());
            
@@ -62,7 +62,7 @@ public class Login {
     
     public void remove(BeansCEF beans){
         try {
-                PreparedStatement stmt = connection.prepareStatement("delete from contatos where login=? and senha=?");
+                PreparedStatement stmt = connection.prepareStatement("delete from cadastroLogin where login=? and senha=?");
                 stmt.setString(1, beans.getLogin());
                 stmt.execute();
                 stmt.close();
@@ -73,7 +73,6 @@ public class Login {
     }   
 
 }
-
     
 /*
 GNU GENERAL PUBLIC LICENSE
