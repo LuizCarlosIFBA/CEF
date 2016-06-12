@@ -5,14 +5,26 @@
  */
 package br.com.javabeans;
 
+import javax.faces.bean.ManagedBean;
 /**
  *
  * @author Luiz Carlos
  */
+  
+@ManagedBean
 public class BeansCEF {
     //Login
     private String login, senha;
-
+  
+    public String autenticar(){
+        return "TelaOpcoes";
+    }
+    
+    /**
+     *
+     * @return
+     */
+   
     public String getLogin() {
         return login;
     }
