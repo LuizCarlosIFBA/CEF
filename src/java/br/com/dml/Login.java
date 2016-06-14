@@ -9,11 +9,13 @@ import br.com.conexao.Conexao;
 import br.com.javabeans.BeansCEF;
 import java.sql.*;
 import java.util.*;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author Luiz Carlos
  */
+@ManagedBean
 public class Login {
     private Connection connection;
     public static Vector<BeansCEF> usuarios = new Vector();

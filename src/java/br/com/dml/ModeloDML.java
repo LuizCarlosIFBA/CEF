@@ -16,11 +16,13 @@ import java.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
 import br.com.javabeans.BeansCEF;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author Luiz Carlos
  */
+@ManagedBean
 public class ModeloDML {
     private Connection connection;
     public static Vector<BeansCEF> usuarios = new Vector();

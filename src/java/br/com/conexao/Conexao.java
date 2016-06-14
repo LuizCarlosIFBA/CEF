@@ -6,11 +6,13 @@
 package br.com.conexao;
 
 import java.sql.*;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
  * @author Luiz Carlos
  */
+@ManagedBean
 public class Conexao {
     private static Connection con;  
    

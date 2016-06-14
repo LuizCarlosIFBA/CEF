@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      
+    
+    <head>
+        <title>Formulário</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <h:form id="frm">
+            <p:toolbar>
+                <p:commandButton value="Adicionar" action="#{loginBeans.adicionarUsuario()}" update=":frm"></p:commandButton>
+            </p:toolbar>    
+                <p:fieldset legend="Cadastro de Usuários">
+                    <p:panelGrid columns="2">
+                        <h:outputLabel value="Login"></h:outputLabel>
+                        <p:inputText value="#{loginBeans.beanscef.login}">
+                        <h:outputLabel value="Senha"></h:outputLabel>
+                        <p:inputText value="#{loginBeans.beanscef.senha}">
+                        <p:panelGrid>     
+                </p:fieldset> 
+        </h:form>        
+    </body>
+</html>

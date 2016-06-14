@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedBean;
  *
  * @author Luiz Carlos
  */
+@ManagedBean
 public class AutenticacaoBean{
     private BeansCEF beans = new BeansCEF();
     
