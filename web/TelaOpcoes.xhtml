@@ -10,20 +10,13 @@ and open the template in the editor.
              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
              template="Template.xhtml"
              xmlns:p="http://primefaces.org/ui">
-
-    <h2>Menu</h2>
+    <h:form>
     <p:menubar>
-        <p:submenu label="Cadastrar usuário">
-            
-        </p:submenu> 
-
-        <p:submenu label="Listar usuarios">
-
-        </p:submenu>
-
-        <p:submenu label="Relatório ">
-
-        </p:submenu>
+        <p:menuitem value="Cadastrar usuário" url="Cadastro.jsf"></p:menuitem> 
+        <p:menuitem value="Listar usuarios"></p:menuitem>
+        <p:menuitem value="Relatório"></p:menuitem>
+        <p:menuitem value="Voltar" url="index.jsf"></p:menuitem>
     </p:menubar> 
+    </h:form>
 
 </ui:decorate>    

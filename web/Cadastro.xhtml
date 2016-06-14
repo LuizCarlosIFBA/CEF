@@ -11,23 +11,22 @@ and open the template in the editor.
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
       
     
-    <head>
+    <h:head>
         <title>Formulário</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
+    </h:head>
+    <h:body>
         <h:form id="frm">
-            <p:toolbar>
-                <p:commandButton value="Adicionar" action="#{loginBeans.adicionarUsuario()}" update=":frm"></p:commandButton>
-            </p:toolbar>    
-                <p:fieldset legend="Cadastro de Usuários">
-                    <p:panelGrid columns="2">
-                        <h:outputLabel value="Login"></h:outputLabel>
-                        <p:inputText value="#{loginBeans.beanscef.login}">
-                        <h:outputLabel value="Senha"></h:outputLabel>
-                        <p:inputText value="#{loginBeans.beanscef.senha}">
-                        <p:panelGrid>     
-                </p:fieldset> 
+            <p:fieldset legend="Cadastro de Usuários">
+                <p:panelGrid columns="2">
+                    <h:outputLabel value="Login"></h:outputLabel>
+                    <p:inputText value="#{loginBeans.beanscef.login}"/>
+                    <h:outputLabel value="Senha"></h:outputLabel>
+                    <p:inputText value="#{loginBeans.beanscef.senha}"/>
+                    <h:commandButton value="Cadastrar" action="#{loginBeans.adicionarUsuario()}"/>
+                    <h:commandButton value="Voltar" action="TelaOpcoes.jsf"/>
+                </p:panelGrid>     
+            </p:fieldset> 
         </h:form>        
-    </body>
+    </h:body>
 </html>
