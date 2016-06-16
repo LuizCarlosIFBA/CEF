@@ -25,7 +25,7 @@ public class Login {
     
     
     public void cadastroLogin(BeansCEF beans) throws ClassNotFoundException{  
-         try {
+         try {  Conexao.conectarBanco();
                 String sql = "insert into cadastroLogin(login,senha)values(?,?)";
                 // prepared statement para inserção
                 PreparedStatement stmt = connection.prepareStatement(sql);
@@ -40,9 +40,8 @@ public class Login {
                 stmt.execute();
 
                 stmt.close();
-
+                Conexao.fecharConexao();
             } catch (SQLException e) {
-
                     throw new RuntimeException(e);
             }
     }

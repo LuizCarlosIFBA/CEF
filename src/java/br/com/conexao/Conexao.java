@@ -6,6 +6,8 @@
 package br.com.conexao;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 
 /**
@@ -28,6 +30,17 @@ public class Conexao {
             
      
         return con;  
+    }
+    
+    public static void fecharConexao(){
+        if(con!=null){
+            try {
+                con.close();
+                con=null;
+            } catch (SQLException ex) {
+                Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 }
 

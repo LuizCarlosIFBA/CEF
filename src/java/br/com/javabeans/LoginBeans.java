@@ -5,8 +5,12 @@
  */
 package br.com.javabeans;
 
+import br.com.dml.Login;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 
 /**
@@ -18,8 +22,14 @@ public class LoginBeans {
     private BeansCEF beanscef = new BeansCEF();
     private List<BeansCEF> beans = new ArrayList<>();
     
-    public void adicionarUsuario(){
-        beans.add(beanscef);
+    public void adicionarUsuario() throws SQLException{
+        Login login = new Login();
+        try {      
+            login.cadastroLogin(beanscef);
+            beans.add(beanscef);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(LoginBeans.class.getName()).log(Level.SEVERE, null, ex);
+        }
         beanscef = new BeansCEF();
     }
 

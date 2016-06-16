@@ -17,8 +17,11 @@ public class BeansCEF {
     private String login, senha;
   
     public String autenticar(){
+       if("root".equals(getLogin()) &&
+       "123".equals(getSenha())) {
         return "TelaOpcoes";
-    }
+       }else return null;
+    }   
     
     /**
      *
