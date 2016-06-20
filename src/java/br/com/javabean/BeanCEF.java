@@ -3,31 +3,42 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.javabeans;
+package br.com.javabean;
 
+import java.util.Objects;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 /**
  *
  * @author Luiz Carlos
  */
   
 @ManagedBean
-public class BeansCEF {
+@SessionScoped
+public class BeanCEF {
     //Login
-    private String login, senha;
-  
-    public String autenticar(){
-       if("root".equals(getLogin()) &&
-       "123".equals(getSenha())) {
-        return "TelaOpcoes";
-       }else return null;
-    }   
+    String login;
+    String senha; 
+    String nome;
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    private Integer id_cadastro;   
     
-    /**
-     *
-     * @return
-     */
-   
+  
+    public Integer getId_cadastro() {
+        return id_cadastro;
+    }
+
+    public void setId_cadastro(Integer id_cadastro) {
+        this.id_cadastro = id_cadastro;
+    }
+    
     public String getLogin() {
         return login;
     }
@@ -44,7 +55,20 @@ public class BeansCEF {
         this.senha = senha;
     }
     
-        
+    //Login
+            //Métodos convencionais 
+    public String autenticar(){
+       if("root".equals(getLogin()) &&
+       "123".equals(getSenha())) {
+        return "Cadastro";
+       }else return null;
+    } 
+    
+    /**
+     *
+     * @return
+     */
+          
     //Tabela cadastro
     private String nomeProduto;
     private int estoque,entrada,saida,id_produto; 
@@ -89,9 +113,30 @@ public class BeansCEF {
         this.saida = saida;
     }
     
-    
-}
+     @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.id_cadastro);
+        hash = 83 * hash + this.id_produto;
+        return hash;
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BeanCEF other = (BeanCEF) obj;
+        if (this.id_produto != other.id_produto) {
+            return false;
+        }
+        return true;
+    }
+   
+}
 
 /*
 GNU GENERAL PUBLIC LICENSE

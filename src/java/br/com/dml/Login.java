@@ -6,27 +6,32 @@
 package br.com.dml;
 
 import br.com.conexao.Conexao;
-import br.com.javabeans.BeansCEF;
-import java.sql.*;
+import br.com.javabean.BeanCEF;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author Luiz Carlos
  */
 @ManagedBean
+@SessionScoped
 public class Login {
     private Connection connection;
-    public static Vector<BeansCEF> usuarios = new Vector();
+    public static Vector<BeanCEF> usuarios = new Vector();
     public Login() throws SQLException {
         this.connection = new Conexao().conectarBanco();
     }
     
     
-    public void cadastroLogin(BeansCEF beans) throws ClassNotFoundException{  
+    public void cadastroLogin(BeanCEF beans) throws ClassNotFoundException, SQLException{  
          try {  Conexao.conectarBanco();
-                String sql = "insert into cadastroLogin(login,senha)values(?,?)";
+                String sql = "insert into cadastroLogin(login,senha,nome)values(?,?,?)";
                 // prepared statement para inserção
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 // seta os valores
@@ -34,9 +39,10 @@ public class Login {
                 stmt.setString(1,beans.getLogin());
 
                 stmt.setString(2,beans.getSenha());
-
+                
+                stmt.setString(3,beans.getNome());
+                System.out.println("Cadastrado");
                 // executa
-
                 stmt.execute();
 
                 stmt.close();
@@ -47,7 +53,7 @@ public class Login {
     }
     
           
-    public void alterarLogin(BeansCEF beans){
+    public void alterarLogin(BeanCEF beans){
        try {
            PreparedStatement pst;
            pst = connection.prepareStatement("update cadastroLogin set login=?, senha=? where login=? and senha=?");
@@ -60,8 +66,28 @@ public class Login {
        }
     }
     
-    
-    public void remove(BeansCEF beans){
+    public List<BeanCEF> consultarUsuarios() throws SQLException{
+        try{
+            Connection conectar = Conexao.conectarBanco();
+            PreparedStatement pst;
+            pst = connection.prepareStatement("select * from cadastroPessoa");
+            List<BeanCEF> login = new ArrayList<>();
+            ResultSet resultset = pst.executeQuery();
+            while(resultset.next()){
+                BeanCEF beans = new BeanCEF();
+                beans.setId_cadastro(resultset.getInt("id_cadastro"));
+                beans.setLogin(resultset.getString("login"));
+                beans.setSenha(resultset.getString("senha"));
+                beans.setNome(resultset.getString("nome"));  
+                login.add(beans);
+            }
+            return login;
+            }catch(SQLException ex){
+            return null;
+            }
+    }
+     
+    public void remove(BeanCEF beans){
         try {
                 PreparedStatement stmt = connection.prepareStatement("delete from cadastroLogin where login=? and senha=?");
                 stmt.setString(1, beans.getLogin());
@@ -69,12 +95,13 @@ public class Login {
                 stmt.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-        
             }
-    }   
-
+    } 
 }
     
+       
+
+ 
 /*
 GNU GENERAL PUBLIC LICENSE
                        Version 3, 4 june 2016

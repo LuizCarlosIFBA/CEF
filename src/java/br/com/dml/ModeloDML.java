@@ -15,22 +15,25 @@ import java.sql.Statement;
 import java.util.Vector;
 import java.util.ArrayList;
 import java.util.List;
-import br.com.javabeans.BeansCEF;
+import br.com.javabean.BeanCEF;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 /**
  *
  * @author Luiz Carlos
  */
 @ManagedBean
+@SessionScoped
+
 public class ModeloDML {
     private Connection connection;
-    public static Vector<BeansCEF> usuarios = new Vector();
+    public static Vector<BeanCEF> usuarios = new Vector();
     public ModeloDML () throws SQLException {
         this.connection = new Conexao().conectarBanco();
     }
      
-    public void inserirProduto(BeansCEF beans) throws ClassNotFoundException{
+    public void inserirProduto(BeanCEF beans) throws ClassNotFoundException{
        try {
            PreparedStatement pst;
            pst = connection.prepareStatement("insert into cadastroProduto(nomeProduto,entrada,saida,estoque) values (?,?,?,?)");
@@ -45,7 +48,7 @@ public class ModeloDML {
        }
     }
    
-    public void atualizarPessoa(BeansCEF beans){
+    public void atualizarPessoa(BeanCEF beans){
        try {
            PreparedStatement pst;
            pst = connection.prepareStatement("update cadastroProduto set nomeProduto=?, entrada=?, saida=?, estoque=? where id_produto = ?");
@@ -60,7 +63,7 @@ public class ModeloDML {
        }
     }
 
-    public  BeansCEF carregarUmaPessoa(BeansCEF beans){
+    public  BeanCEF carregarUmaPessoa(BeanCEF beans){
        try {
            PreparedStatement pst = connection.prepareStatement("select * from cadastroPessoa where id_produto = ?");
            pst.setInt(1, beans.getId_produto());
@@ -78,15 +81,15 @@ public class ModeloDML {
        }
    }
 
-   public List<BeansCEF> carregarTodasPessoas(){
+   public List<BeanCEF> carregarTodasPessoas(){
   
-      List<BeansCEF> beanscef = new ArrayList<BeansCEF>();
+      List<BeanCEF> beanscef = new ArrayList<BeanCEF>();
       //fechar método close
       try {
          Statement st = connection.createStatement(); 
          ResultSet rs = st.executeQuery("select * from cadastroPessoa"); 
          while (rs.next()){
-	    BeansCEF beans= new BeansCEF();
+	    BeanCEF beans= new BeanCEF();
 	    beans.setId_produto(rs.getInt("id_produto"));
             beans.setNomeProduto(rs.getString("nomeProduto"));
 	    beans.setEntrada(rs.getInt("entrada"));
@@ -101,7 +104,7 @@ public class ModeloDML {
      return usuarios;
    }
    
-  public void excluir(BeansCEF beans) {
+  public void excluir(BeanCEF beans) {
      try{   
             String sql ="delete from cadastroPessoa where id_produto=?";
             PreparedStatement stmt = connection.prepareStatement(sql);
