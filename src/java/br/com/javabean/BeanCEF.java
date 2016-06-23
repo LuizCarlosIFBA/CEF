@@ -20,7 +20,8 @@ public class BeanCEF {
     String login;
     String senha; 
     String nome;
-
+    Integer id_cadastro;  
+    
     public String getNome() {
         return nome;
     }
@@ -28,9 +29,7 @@ public class BeanCEF {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    private Integer id_cadastro;   
-    
-  
+   
     public Integer getId_cadastro() {
         return id_cadastro;
     }
@@ -112,12 +111,11 @@ public class BeanCEF {
     public void setSaida(int saida) {
         this.saida = saida;
     }
-    
-     @Override
+
+    @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + Objects.hashCode(this.id_cadastro);
-        hash = 83 * hash + this.id_produto;
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.id_cadastro);
         return hash;
     }
 
@@ -130,12 +128,11 @@ public class BeanCEF {
             return false;
         }
         final BeanCEF other = (BeanCEF) obj;
-        if (this.id_produto != other.id_produto) {
+        if (!Objects.equals(this.id_cadastro, other.id_cadastro)) {
             return false;
         }
         return true;
     }
-   
 }
 
 /*

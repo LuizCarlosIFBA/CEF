@@ -22,8 +22,8 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class LoginBean {
     private BeanCEF beanscef = new BeanCEF();
-    private List<BeanCEF> beans = new ArrayList<BeanCEF>();
-    
+    private List<BeanCEF> beans = new ArrayList<BeanCEF>(); 
+
     public void adicionarUsuario() throws ClassNotFoundException{ 
         try {
             beans.add(beanscef);
@@ -35,17 +35,14 @@ public class LoginBean {
             
     }
     
-    public void listarUsuario(){
-        Login login;
-        try {
-            login = new Login();
-            login.consultarUsuarios();
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-       
+    public void listarUsuario() throws SQLException{
+        Login login = new Login();
+        beans = login.consultarLogin();
     }
-
+    
+    public void editarUsuario(BeanCEF beans) throws SQLException{
+        beanscef = beans;
+    }
     public BeanCEF getBeanscef() {
         return beanscef;
     }

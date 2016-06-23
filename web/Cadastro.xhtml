@@ -17,6 +17,7 @@ and open the template in the editor.
         <p:toolbar>
             <p:toolbarGroup>
                 <p:commandButton value="Cadastrar" action="#{loginBean.adicionarUsuario()}" update="@form"></p:commandButton>
+                <p:commandButton value="Listagem" action="#{loginBean.listarUsuario()}" update="@form"></p:commandButton>
             </p:toolbarGroup>   
         </p:toolbar>    
         <p:fieldset legend="Cadastro de Usuários">
@@ -28,10 +29,19 @@ and open the template in the editor.
                 <h:outputLabel value="Nome"></h:outputLabel>
                 <p:inputText value="#{loginBean.beanscef.nome}"/>
             </p:panelGrid>  
-            <p:dataTable value="#{loginBean.beans}" var="beanscef">
-                <p:column headerText="Nome">
+            <p:dataTable value="#{loginBean.beans}" var="beanscef">     
+                <p:column >
+                    <p:commandButton value="Editar" action="#{loginBean.editarUsuario(beanscef)}" update="@form"></p:commandButton>
+                </p:column>
+                <p:column headerText="Login" sortBy="#{beanscef.login}">
+                     <h:outputText value="#{beanscef.login}"></h:outputText>
+                </p:column>
+                 <p:column headerText="Senha" sortBy="#{beanscef.senha}">
+                    <h:outputText value="#{beanscef.senha}"></h:outputText>
+                </p:column>
+                <p:column headerText="Nome" sortBy="#{beanscef.nome}">
                     <h:outputText value="#{beanscef.nome}"></h:outputText>
-                </p:column>    
+                </p:column>
             </p:dataTable>    
         </p:fieldset> 
      </h:form>

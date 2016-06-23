@@ -23,25 +23,26 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class Login {
     private Connection connection;
-    public static Vector<BeanCEF> usuarios = new Vector();
+  
     public Login() throws SQLException {
         this.connection = new Conexao().conectarBanco();
     }
-    
-    
+     
     public void cadastroLogin(BeanCEF beans) throws ClassNotFoundException, SQLException{  
          try {  Conexao.conectarBanco();
                 String sql = "insert into cadastroLogin(login,senha,nome)values(?,?,?)";
-                // prepared statement para inserção
-                PreparedStatement stmt = connection.prepareStatement(sql);
-                // seta os valores
-
+                PreparedStatement stmt;
+                if(beans.getId_cadastro()==null){
+                    // prepared statement para inserção
+                    stmt = connection.prepareStatement(sql);
+                }else {stmt = connection.prepareStatement("update cadastroLogin set login=?, senha=?, nome=? where id_cadastro=?");
+                    stmt.setInt(4, beans.getId_cadastro());
+                }
                 stmt.setString(1,beans.getLogin());
 
                 stmt.setString(2,beans.getSenha());
                 
                 stmt.setString(3,beans.getNome());
-                System.out.println("Cadastrado");
                 // executa
                 stmt.execute();
 
@@ -66,22 +67,23 @@ public class Login {
        }
     }
     
-    public List<BeanCEF> consultarUsuarios() throws SQLException{
+    public List<BeanCEF> consultarLogin() throws SQLException{
         try{
-            Connection conectar = Conexao.conectarBanco();
-            PreparedStatement pst;
-            pst = connection.prepareStatement("select * from cadastroPessoa");
-            List<BeanCEF> login = new ArrayList<>();
+            Conexao.conectarBanco();
+            PreparedStatement pst = connection.prepareStatement("select * from cadastroLogin");
             ResultSet resultset = pst.executeQuery();
+            List<BeanCEF> bean = new ArrayList<>();
+           
             while(resultset.next()){
                 BeanCEF beans = new BeanCEF();
                 beans.setId_cadastro(resultset.getInt("id_cadastro"));
                 beans.setLogin(resultset.getString("login"));
                 beans.setSenha(resultset.getString("senha"));
                 beans.setNome(resultset.getString("nome"));  
-                login.add(beans);
+                bean.add(beans);
             }
-            return login;
+        
+            return bean;
             }catch(SQLException ex){
             return null;
             }
