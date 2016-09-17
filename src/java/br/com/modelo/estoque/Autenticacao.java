@@ -3,46 +3,36 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.conexao;
+package br.com.modelo.estoque;
 
-import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import br.com.modelo.estoque.Login;
+import static com.sun.faces.el.FacesCompositeELResolver.ELResolverChainType.Faces;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
 /**
  *
  * @author Luiz Carlos
  */
+@ManagedBean
+public class Autenticacao {
+    private BeanCEF bean;
+    
+    public BeanCEF getBean() {
+        return bean;
+    }
 
-
-public class Conexao {
-    private static Connection con;  
-   
-    public static Connection conectarBanco() throws SQLException{ 
-	
-            try {     
-                Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Estoque","root","1234");
-                System.out.println("Conectado");
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Erro "+ex);
-            }
-            
-     
-        return con;  
+    public void setBean(BeanCEF bean) {
+        this.bean = bean;
     }
     
-    public static void fecharConexao(){
-        if(con!=null){
-            try {
-                con.close();
-                con=null;
-            } catch (SQLException ex) {
-                Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    @PostConstruct
+    public void start(){
+           bean = new BeanCEF();    
+    }
+    
+    public String autenticar(){
+        
+        return "Cadastro";
     }
 }
 
@@ -701,7 +691,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    <CEF(Controle de Estoque Free) 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
+    <Cadastro produto 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.

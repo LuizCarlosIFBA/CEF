@@ -3,21 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.dml;
+package br.com.modelo.estoque;
 
-import br.com.conexao.Conexao;
+import br.com.visao.estoque.Erro;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Vector;
-import java.util.ArrayList;
-import java.util.List;
-import br.com.javabean.BeanCEF;
+import java.util.*;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.persistence.NamedQuery;
 
 /**
  *
@@ -25,100 +21,95 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-
-public class ModeloDML {
+public class Login {
     private Connection connection;
-    public static Vector<BeanCEF> usuarios = new Vector();
-    public ModeloDML () throws SQLException {
+  
+    public Login() throws SQLException, Erro {
         this.connection = new Conexao().conectarBanco();
     }
      
-    public void inserirProduto(BeanCEF beans) throws ClassNotFoundException{
+    public void cadastroLogin(BeanCEF beans) throws ClassNotFoundException, SQLException, Erro{  
+         try {  Conexao.conectarBanco();
+                String sql = "insert into cadastroLogin(login,senha,nome,adm)values(?,?,?,?)";
+                PreparedStatement stmt;
+                if(beans.getId_cadastro()==null){
+                    // prepared statement para inserção
+                    stmt = connection.prepareStatement(sql);
+                }else {stmt = connection.prepareStatement("update cadastroLogin set login=?, senha=?, nome=? adm=? where id_cadastro=?");
+                    stmt.setInt(5, beans.getId_cadastro());
+                }
+                stmt.setString(1,beans.getLogin());
+
+                stmt.setString(2,beans.getSenha());
+                
+                stmt.setString(3,beans.getNome());
+                
+                stmt.setString(4,beans.getAdm());
+                // executa
+                stmt.execute();
+
+                stmt.close();
+                Conexao.fecharConexao();
+            } catch (SQLException ex) {
+                    throw new Erro("Erro ao cadastrar! ", ex);
+            }
+    }
+    
+          
+    public void alterarLogin(BeanCEF beans) throws Erro{
        try {
            PreparedStatement pst;
-           pst = connection.prepareStatement("insert into cadastroProduto(nomeProduto,entrada,saida,estoque) values (?,?,?,?)");
-           pst.setString(1, beans.getNomeProduto());
-           pst.setInt(2, beans.getEntrada());
-           pst.setInt(3, beans.getSaida());
-           pst.setInt(4, beans.getEstoque());
+           pst = connection.prepareStatement("update cadastroLogin set login=?, senha=?, nome=?,adm=? where login=? and senha=?");
+           pst.setString(1, beans.getLogin());
+           pst.setString(2, beans.getSenha());
            
            pst.execute();
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
+       } catch (SQLException ex) {
+           throw new Erro("Erro ao alterar! ", ex);
        }
     }
-   
-    public void atualizarPessoa(BeanCEF beans){
-       try {
-           PreparedStatement pst;
-           pst = connection.prepareStatement("update cadastroProduto set nomeProduto=?, entrada=?, saida=?, estoque=? where id_produto = ?");
-           pst.setString(1, beans.getNomeProduto());
-           pst.setInt(2, beans.getEntrada());
-           pst.setInt(3, beans.getSaida());
-           pst.setInt(4, beans.getEstoque());
-           pst.setInt(5, beans.getId_produto());
-           pst.execute();
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
+    
+    public List<BeanCEF> consultarLogin() throws SQLException, Erro{
+        try{
+            Conexao.conectarBanco();
+            PreparedStatement pst = connection.prepareStatement("select * from cadastroLogin");
+            ResultSet resultset = pst.executeQuery();
+            List<BeanCEF> bean = new ArrayList<>();
+           
+            while(resultset.next()){
+                BeanCEF beans = new BeanCEF();
+                beans.setId_cadastro(resultset.getInt("id_cadastro"));
+                beans.setLogin(resultset.getString("login"));
+                beans.setSenha(resultset.getString("senha"));
+                beans.setNome(resultset.getString("nome"));  
+                beans.setAdm(resultset.getString("adm"));
+                bean.add(beans);
+            }
+        
+            return bean;
+            }catch(SQLException ex){
+                throw new Erro("Erro ao consultar! ", ex);
+            }
     }
-
-    public  BeanCEF carregarUmaPessoa(BeanCEF beans){
-       try {
-           PreparedStatement pst = connection.prepareStatement("select * from cadastroPessoa where id_produto = ?");
-           pst.setInt(1, beans.getId_produto());
-           ResultSet rs = pst.executeQuery();
-           rs.next();
-           beans.setNomeProduto(rs.getString("nomeProduto"));
-           beans.setEntrada(rs.getInt("entrada"));
-           beans.setSaida(rs.getInt("saida"));
-            beans.setSaida(rs.getInt("estoque"));
-           beans.setId_produto(rs.getInt("id_produto"));
-           return beans;
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-           return null;
-       }
-   }
-
-   public List<BeanCEF> carregarTodasPessoas(){
-  
-      List<BeanCEF> beanscef = new ArrayList<BeanCEF>();
-      //fechar método close
-      try {
-         Statement st = connection.createStatement(); 
-         ResultSet rs = st.executeQuery("select * from cadastroPessoa"); 
-         while (rs.next()){
-	    BeanCEF beans= new BeanCEF();
-	    beans.setId_produto(rs.getInt("id_produto"));
-            beans.setNomeProduto(rs.getString("nomeProduto"));
-	    beans.setEntrada(rs.getInt("entrada"));
-	    beans.setSaida(rs.getInt("saida"));;
-	    beans.setEstoque(rs.getInt("estoque"));;
-            usuarios.add(beans);
-	 }
-         rs.close();
-      } catch(SQLException e) {
-	 System.out.println(e.getMessage());
-      }
-     return usuarios;
-   }
-   
-  public void excluir(BeanCEF beans) {
-     try{   
-            String sql ="delete from cadastroPessoa where id_produto=?";
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setLong(1,  beans.getId_produto());
-            stmt.execute();
-            stmt.close();
-        } catch(SQLException e) {
-            throw new RuntimeException(e);
-     }
+     
+    public void remove(BeanCEF beans) throws Erro{
+        try {
+                PreparedStatement stmt = connection.prepareStatement("delete from cadastroLogin where login=? and senha=?");
+                stmt.setString(1, beans.getLogin());
+                stmt.setString(2, beans.getSenha());
+                stmt.execute();
+                stmt.close();
+            } catch (SQLException ex) {
+                throw new Erro("Erro ao deletar! ", ex);
+            }
+    }
+    
     
 }
-}
+    
+       
 
-
+ 
 /*
 GNU GENERAL PUBLIC LICENSE
                        Version 3, 4 june 2016
@@ -774,7 +765,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    <CEF(Controle de Estoque Free) 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
+    <Cadastro produto 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
@@ -796,3 +787,4 @@ Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
 */
+    

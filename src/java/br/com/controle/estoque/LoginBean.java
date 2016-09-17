@@ -3,17 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.dml;
+package br.com.controle.estoque;
 
-import br.com.conexao.Conexao;
-import br.com.javabean.BeanCEF;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import br.com.modelo.estoque.BeanCEF;
+import br.com.modelo.estoque.Login;
+import br.com.visao.estoque.Erro;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -21,89 +22,79 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class Login {
-    private Connection connection;
-  
-    public Login() throws SQLException {
-        this.connection = new Conexao().conectarBanco();
-    }
-     
-    public void cadastroLogin(BeanCEF beans) throws ClassNotFoundException, SQLException{  
-         try {  Conexao.conectarBanco();
-                String sql = "insert into cadastroLogin(login,senha,nome)values(?,?,?)";
-                PreparedStatement stmt;
-                if(beans.getId_cadastro()==null){
-                    // prepared statement para inserção
-                    stmt = connection.prepareStatement(sql);
-                }else {stmt = connection.prepareStatement("update cadastroLogin set login=?, senha=?, nome=? where id_cadastro=?");
-                    stmt.setInt(4, beans.getId_cadastro());
-                }
-                stmt.setString(1,beans.getLogin());
+public class LoginBean {
+    private BeanCEF beanscef = new BeanCEF();
+    private List<BeanCEF> beans = new ArrayList<BeanCEF>(); 
 
-                stmt.setString(2,beans.getSenha());
-                
-                stmt.setString(3,beans.getNome());
-                // executa
-                stmt.execute();
-
-                stmt.close();
-                Conexao.fecharConexao();
-            } catch (SQLException e) {
-                    throw new RuntimeException(e);
-            }
+    public void adicionarUsuario() throws ClassNotFoundException, Erro, SQLException{ 
+        try {
+            beans.add(beanscef);
+            new Login().cadastroLogin(beanscef);
+            beanscef = new BeanCEF();
+            adicionarMSG("Gravação bem sucedida ","",FacesMessage.SEVERITY_INFO);
+        } catch (Erro ex) {
+            adicionarMSG(ex.getMessage(), ex.getCause().getMessage(),FacesMessage.SEVERITY_ERROR);
+        }
+            
     }
     
-          
-    public void alterarLogin(BeanCEF beans){
-       try {
-           PreparedStatement pst;
-           pst = connection.prepareStatement("update cadastroLogin set login=?, senha=? where login=? and senha=?");
-           pst.setString(1, beans.getLogin());
-           pst.setString(2, beans.getSenha());
-           
-           pst.execute();
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-    }
-    
-    public List<BeanCEF> consultarLogin() throws SQLException{
-        try{
-            Conexao.conectarBanco();
-            PreparedStatement pst = connection.prepareStatement("select * from cadastroLogin");
-            ResultSet resultset = pst.executeQuery();
-            List<BeanCEF> bean = new ArrayList<>();
-           
-            while(resultset.next()){
-                BeanCEF beans = new BeanCEF();
-                beans.setId_cadastro(resultset.getInt("id_cadastro"));
-                beans.setLogin(resultset.getString("login"));
-                beans.setSenha(resultset.getString("senha"));
-                beans.setNome(resultset.getString("nome"));  
-                bean.add(beans);
+    public void listarUsuario() throws SQLException{
+        try { 
+            Login login;
+            login = new Login();
+            beans = login.consultarLogin();
+            if(beans==null || beans.size()==0){
+                 adicionarMSG("Dado não encontrado ","",FacesMessage.SEVERITY_INFO);
             }
         
-            return bean;
-            }catch(SQLException ex){
-            return null;
-            }
-    }
-     
-    public void remove(BeanCEF beans){
-        try {
-                PreparedStatement stmt = connection.prepareStatement("delete from cadastroLogin where login=? and senha=?");
-                stmt.setString(1, beans.getLogin());
-                stmt.execute();
-                stmt.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-    } 
-}
-    
-       
 
- 
+        } catch (Erro ex) {
+            adicionarMSG(ex.getMessage(), ex.getCause().getMessage(),FacesMessage.SEVERITY_WARN);
+        }
+        
+    }
+    
+    public void deletar(BeanCEF beans) throws SQLException{
+        try{
+           Login login = new Login();
+           login.remove(beans);
+           adicionarMSG("Remoção bem sucedida ","",FacesMessage.SEVERITY_INFO);
+
+        }catch(Erro ex){
+           adicionarMSG(ex.getMessage(), ex.getCause().getMessage(),FacesMessage.SEVERITY_ERROR);
+
+        }
+    }
+    
+    public void editarUsuario(BeanCEF beans) throws SQLException{
+        beanscef = beans;
+    }
+        
+    public void adicionarMSG(String sumario, String detalhe,FacesMessage.Severity tipoErro){
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage msg = new FacesMessage(tipoErro, sumario, detalhe);
+        context.addMessage(null,msg);
+    }    
+    
+    public BeanCEF getBeanscef() {
+        return beanscef;
+    }
+
+    public void setBeanscef(BeanCEF beanscef) {
+        this.beanscef = beanscef;
+    }
+
+    public List<BeanCEF> getBeans() {
+        return beans;
+    }
+
+    public void setBeans(List<BeanCEF> beans) {
+        this.beans = beans;
+    }
+    
+    
+}
+
 /*
 GNU GENERAL PUBLIC LICENSE
                        Version 3, 4 june 2016
@@ -759,7 +750,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    <CEF(Controle de Estoque Free) 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
+    <Cadastro produto 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
@@ -781,4 +772,3 @@ Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
 */
-    

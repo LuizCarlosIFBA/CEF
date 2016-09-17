@@ -10,16 +10,18 @@ and open the template in the editor.
              xmlns:p="http://primefaces.org/ui"
              xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-             template="Template.xhtml">
+             template="Template.xhtml"
+             xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
     <h:form>
         <p:toolbar>
             <p:toolbarGroup>
-                <p:commandButton value="Cadastrar" action="#{loginBean.adicionarUsuario()}" update="@form"></p:commandButton>
+                <p:commandButton value="Gravar" action="#{loginBean.adicionarUsuario()}" update="@form"></p:commandButton>
                 <p:commandButton value="Listagem" action="#{loginBean.listarUsuario()}" update="@form"></p:commandButton>
             </p:toolbarGroup>   
         </p:toolbar>    
+        <p:messages autoUpdate="true" showDetail="true"></p:messages>
         <p:fieldset legend="Cadastro de Usuários">
             <p:panelGrid columns="2">
                 <h:outputLabel value="Login"></h:outputLabel>
@@ -28,10 +30,16 @@ and open the template in the editor.
                 <p:inputText value="#{loginBean.beanscef.senha}"/>
                 <h:outputLabel value="Nome"></h:outputLabel>
                 <p:inputText value="#{loginBean.beanscef.nome}"/>
+                <h:outputLabel value="Administrador"></h:outputLabel>
+                <h:selectOneMenu value="#{loginBean.beanscef.adm}">
+                    <f:selectItem itemValue="Sim"/>
+                    <f:selectItem itemValue="Não"/>
+                </h:selectOneMenu>
             </p:panelGrid>  
             <p:dataTable value="#{loginBean.beans}" var="beanscef">     
                 <p:column >
                     <p:commandButton value="Editar" action="#{loginBean.editarUsuario(beanscef)}" update="@form"></p:commandButton>
+                    <p:commandButton value="Remover" action="#{loginBean.deletar(beanscef)}" update="@form"></p:commandButton>
                 </p:column>
                 <p:column headerText="Login" sortBy="#{beanscef.login}">
                      <h:outputText value="#{beanscef.login}"></h:outputText>
@@ -41,6 +49,9 @@ and open the template in the editor.
                 </p:column>
                 <p:column headerText="Nome" sortBy="#{beanscef.nome}">
                     <h:outputText value="#{beanscef.nome}"></h:outputText>
+                </p:column>
+                <p:column headerText="Administrador" sortBy="#{beanscef.adm}">
+                    <h:outputText value="#{beanscef.adm}"></h:outputText>
                 </p:column>
             </p:dataTable>    
         </p:fieldset> 

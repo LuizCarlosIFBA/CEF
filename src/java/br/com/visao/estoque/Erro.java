@@ -3,136 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.javabean;
+package br.com.visao.estoque;
 
-import java.util.Objects;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 /**
  *
  * @author Luiz Carlos
  */
-  
-@ManagedBean
-@SessionScoped
-public class BeanCEF {
-    //Login
-    String login;
-    String senha; 
-    String nome;
-    Integer id_cadastro;  
-    
-    public String getNome() {
-        return nome;
+public class Erro extends Exception{
+
+    public Erro(String message) {
+        super(message);
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-   
-    public Integer getId_cadastro() {
-        return id_cadastro;
-    }
-
-    public void setId_cadastro(Integer id_cadastro) {
-        this.id_cadastro = id_cadastro;
+    public Erro(String message, Throwable cause) {
+        super(message, cause);
     }
     
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login= login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-    
-    //Login
-            //Métodos convencionais 
-    public String autenticar(){
-       if("root".equals(getLogin()) &&
-       "123".equals(getSenha())) {
-        return "Cadastro";
-       }else return null;
-    } 
-    
-    /**
-     *
-     * @return
-     */
-          
-    //Tabela cadastro
-    private String nomeProduto;
-    private int estoque,entrada,saida,id_produto; 
-
-    public int getId_produto() {
-        return id_produto;
-    }
-
-    public void setId_produto(int id_produto) {
-        this.id_produto = id_produto;
-    }
-
-    public String getNomeProduto() {
-        return nomeProduto;
-    }
-
-    public void setNomeProduto(String nomeProduto) {
-        this.nomeProduto = nomeProduto;
-    }
-
-    public int getEstoque() {
-        return estoque;
-    }
-
-    public void setEstoque(int estoque) {
-        this.estoque = estoque;
-    }
-
-    public int getEntrada() {
-        return entrada;
-    }
-
-    public void setEntrada(int entrada) {
-        this.entrada = entrada;
-    }
-
-    public int getSaida() {
-        return saida;
-    }
-
-    public void setSaida(int saida) {
-        this.saida = saida;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 71 * hash + Objects.hashCode(this.id_cadastro);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BeanCEF other = (BeanCEF) obj;
-        if (!Objects.equals(this.id_cadastro, other.id_cadastro)) {
-            return false;
-        }
-        return true;
-    }
 }
 
 /*
@@ -790,7 +676,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    <CEF(Controle de Estoque Free) 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
+    <Cadastro produto 1.0>  Copyright (C) <2016>  <Luiz Carlos dos Santos Ferreira Sacramento>
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
